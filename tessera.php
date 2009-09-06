@@ -43,15 +43,7 @@ class Tessera {
 	function __construct($routes, $config = array()) {
 		$this->config = $config;
 		$this->request_method = $_SERVER['REQUEST_METHOD'];
-		/* Snag the query string and use it as the request path */
-		if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
-			$_SERVER['QUERY_STRING'] = $_SERVER['REDIRECT_QUERY_STRING'];
-		}
-		$this->request_path = $_SERVER['QUERY_STRING'];
-		/* Set a default request path if necessary */
-		if (strlen($this->request_path) == 0) {
-			$this->request_path = '/';
-		}
+		$this->request_path = Tessera::request_path();
 		/* Compile all routes, select one, and respond */
 		$this->routes = $this->compileRoutes($routes);
 		if (!$this->routeRequest($this->request_path, $this->routes)) {
@@ -205,6 +197,21 @@ class Tessera {
 		include $view_file;
 		$html = ob_get_clean();
 		return $html;
+	}
+
+	public static function request_path() {
+		$request_path = '';
+		if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
+			$request_path = $_SERVER['REDIRECT_QUERY_STRING'];
+		}
+		else {
+			$request_path = $_SERVER['QUERY_STRING'];
+		}
+		/* Set a default request path if necessary */
+		if (strlen($request_path) == 0) {
+			$request_path = '/';
+		}
+		return $request_path;
 	}
 }
 ?>
