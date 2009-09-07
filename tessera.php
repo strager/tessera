@@ -201,7 +201,10 @@ class Tessera {
 
 	public static function request_path() {
 		$request_path = '';
-		if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
+		if (isset($_SERVER['PATH_INFO'])) {
+			$request_path = $_SERVER['PATH_INFO'];
+		}
+		else if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
 			$request_path = $_SERVER['REDIRECT_QUERY_STRING'];
 		}
 		else {
