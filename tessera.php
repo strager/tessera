@@ -42,8 +42,13 @@ class Tessera {
 	 */
 	function __construct($routes, $config = array()) {
 		$this->config = $config;
+		if (isset($config['request_path']) && $config['request_path']) {
+			$this->request_path = $config['request_path'];
+		}
+		else {
+			$this->request_path = Tessera::request_path();
+		}
 		$this->request_method = $_SERVER['REQUEST_METHOD'];
-		$this->request_path = Tessera::request_path();
 		/* Compile all routes, select one, and respond */
 		$this->routes = $this->compileRoutes($routes);
 		if (!$this->routeRequest($this->request_path, $this->routes)) {
